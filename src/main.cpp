@@ -1,4 +1,6 @@
 #include "liblexer/lexer.hpp"
+#include "grammar.hpp"
+#include "shift_reduce.hpp"
 
 #ifdef DUMP_JSON
 static void dump_tokens(const std::vector<std::unique_ptr<Lexer::Token>>& tokens) {
@@ -27,5 +29,8 @@ int main() {
   dump_tokens(tokens);
 #endif
 
+  Syntax::Shift_reduce_parser parser{Grammar::Productions};
+  parser.parse(tokens);
 
+  return 0;
 }
