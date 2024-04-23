@@ -8,9 +8,9 @@ namespace Syntax {
 
 class Parser {
 
-  std::vector<Grammar::Production> productions_;
-
 protected:
+
+  std::vector<Grammar::Production> productions_;
 
   Parser(const std::vector<Grammar::Production>& productions):
   productions_(productions) {}

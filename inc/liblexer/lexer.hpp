@@ -11,7 +11,7 @@
 
 namespace Lexer {
 
-enum class Token_class {
+enum Token_class {
 
   KWORD,    /* Keyword. */
   TYPE_ID,  /* Type identifier. */
@@ -71,6 +71,8 @@ public:
   Token_kword(Value value):
     Token(Token_class::KWORD),
     value_(value) {}
+
+  Value value() const { return value_; }
 
   std::string class_str() const override {
     return std::string("KWORD");
@@ -208,6 +210,8 @@ public:
     Token(Token_class::OPER),
     value_(value) {}
 
+  Value value() const { return value_; }
+
   std::string class_str() const override {
     return std::string("OPER");
   }
@@ -236,7 +240,7 @@ class Token_punct : public Token {
 public:
 
   enum Value {
-    OPENING_BR, CLOSING_BR
+    OPENING_BR, CLOSING_BR, END
   };
 
 private:
@@ -246,8 +250,10 @@ private:
 public:
 
   Token_punct(Value value):
-    Token(Token_class::TYPE_ID),
+    Token(Token_class::PUNCT),
     value_(value) {}
+
+  Value value() const { return value_; }
 
   std::string class_str() const override {
     return std::string("PUNCT");
@@ -258,6 +264,7 @@ public:
     switch(value_) {
       case Value::OPENING_BR: return "OPENING_BR";
       case Value::CLOSING_BR: return "CLOSING_BR";
+      case Value::END:        return "$";
       default: exit(EXIT_FAILURE);
     }
   }

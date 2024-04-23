@@ -57,6 +57,30 @@ public:
   ~Shift_reduce_parser() {}
 
   void parse(const tokens_vector& tokens) override;
+
+  void shift (std::vector<unsigned int>& state_stack, Action action);
+  void reduce(std::vector<unsigned int>& state_stack, Action action);
+  
+#ifdef VERBOSE
+
+  static constexpr unsigned int Table_entry_width = 32U;
+
+  void verbose_annotate(
+    const tokens_vector& tokens, 
+    size_t token_idx, 
+    const std::vector<unsigned int>& state_stack, 
+    unsigned iter_idx
+  );
+
+  static void verbose_write_header();
+  static void verbose_write_separator();
+
+  static void verbose_print_str_aligned(const std::string& str);
+#endif
+
+private:
+
+  unsigned int token_to_terminal(const Lexer::Token& token);
 };
 
 }; // namespace Syntax
