@@ -37,7 +37,7 @@ const std::vector<Production> Productions = {
   {.nonterminal = Nonterminal::E, .len = 3, .str = "E->E+T"},
 
   /* (2) E -> E - T */
-  // {.nonterminal = Nonterminal::E, .len = 3}, // TODO
+  {.nonterminal = Nonterminal::E, .len = 3, .str = "E->E-T"},
 
   /* (3) E -> T */
   {.nonterminal = Nonterminal::E, .len = 1, .str = "E->T"},
@@ -46,7 +46,7 @@ const std::vector<Production> Productions = {
   {.nonterminal = Nonterminal::T, .len = 3, .str = "T->T*F"},
 
   /* (5) T -> T / F */
-  // {.nonterminal = Nonterminal::T, .len = 3}, // TODO
+  {.nonterminal = Nonterminal::T, .len = 3, .str = "T->T/F"},
 
   /* (6) T -> F */
   {.nonterminal = Nonterminal::T, .len = 1, .str = "T->F"},
@@ -58,7 +58,7 @@ const std::vector<Production> Productions = {
   {.nonterminal = Nonterminal::F, .len = 1, .str = "F->id"},
 
   /* (9) F -> num */
-  // {.nonterminal = Nonterminal::F, .len = 1}, // TODO
+  {.nonterminal = Nonterminal::F, .len = 1, .str = "F->num"},
 
 };
 
