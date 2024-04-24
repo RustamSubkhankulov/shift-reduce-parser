@@ -60,7 +60,7 @@ public:
 
   void shift (std::vector<unsigned int>& state_stack, Action action);
   void reduce(std::vector<unsigned int>& state_stack, Action action);
-  
+
 #ifdef VERBOSE
 
   static constexpr unsigned int Table_entry_width = 32U;

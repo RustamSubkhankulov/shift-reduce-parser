@@ -57,7 +57,7 @@ const Shift_reduce_parser::Action_table Shift_reduce_parser::action_table = {
   { {.state = 1U,  .symb = END   }, { .type = ACCEPT            } },
 
   { {.state = 2U,  .symb = ADD   }, { .type = REDUCE, .num = 3U } },
-  { {.state = 2U,  .symb = SUB   }, { .type = REDUCE, .num = 2U } }, //
+  { {.state = 2U,  .symb = SUB   }, { .type = REDUCE, .num = 3U } }, //
   { {.state = 2U,  .symb = MUL   }, { .type = SHIFT,  .num = 7U } },
   { {.state = 2U,  .symb = DIV   }, { .type = SHIFT,  .num = 15U} }, // 
   { {.state = 2U,  .symb = CL_BR }, { .type = REDUCE, .num = 3U } },
@@ -108,7 +108,9 @@ const Shift_reduce_parser::Action_table Shift_reduce_parser::action_table = {
   { {.state = 10U, .symb = END   }, { .type = REDUCE, .num = 4U } },
 
   { {.state = 11U, .symb = ADD   }, { .type = REDUCE, .num = 7U } },
+  { {.state = 11U, .symb = SUB   }, { .type = REDUCE, .num = 7U } }, //
   { {.state = 11U, .symb = MUL   }, { .type = REDUCE, .num = 7U } },
+  { {.state = 11U, .symb = DIV   }, { .type = REDUCE, .num = 7U } }, //
   { {.state = 11U, .symb = CL_BR }, { .type = REDUCE, .num = 7U } },
   { {.state = 11U, .symb = END   }, { .type = REDUCE, .num = 7U } },
 

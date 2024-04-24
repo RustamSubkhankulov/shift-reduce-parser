@@ -262,8 +262,8 @@ public:
   std::string value_str() const override {
     
     switch(value_) {
-      case Value::OPENING_BR: return "OPENING_BR";
-      case Value::CLOSING_BR: return "CLOSING_BR";
+      case Value::OPENING_BR: return "OP_BR";
+      case Value::CLOSING_BR: return "CL_BR";
       case Value::END:        return "$";
       default: exit(EXIT_FAILURE);
     }
