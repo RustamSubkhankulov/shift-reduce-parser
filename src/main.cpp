@@ -7,7 +7,10 @@ int main() {
   auto& tokens = Lexer::get_tokens();
 
   Syntax::Shift_reduce_parser parser{Arithm::Productions};
-  parser.parse(tokens);
+  AST::Ast ast;
+
+  parser.parse(tokens, ast);
+  ast.dump_tree(std::cout);
 
   return 0;
 }

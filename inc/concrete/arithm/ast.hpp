@@ -17,13 +17,13 @@ namespace Arithm {
 
 using Basic_ast_node = AST::Ast::Node;
 
-class Identifier_node : public Basic_ast_node {
+class Id_node : public Basic_ast_node {
 
   std::string value_;
 
 public:
 
-  Identifier_node(const std::string& value):
+  Id_node(const std::string& value):
     value_(value) {}
 
   void print(std::ostream& ostream) const override {
@@ -46,13 +46,13 @@ public:
   }
 };
 
-class Operator_node : public Basic_ast_node {
+class Op_node : public Basic_ast_node {
 
-  enum Terminal value_;
+  unsigned int value_;
 
 public:
 
-  Operator_node(enum Terminal value):
+  Op_node(unsigned int value):
     value_(value) {}
 
   void print(std::ostream& ostream) const override {

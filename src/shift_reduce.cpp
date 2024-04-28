@@ -1,4 +1,5 @@
 #include <stdexcept>
+#include <cassert>
 #include <cstring>
 #include <string>
 
@@ -8,6 +9,7 @@
 namespace Syntax {
 
 using namespace Arithm;
+using namespace AST;
 
 const Shift_reduce_parser::Action_table Shift_reduce_parser::action_table = {
 
@@ -128,10 +130,12 @@ const Shift_reduce_parser::Goto_table Shift_reduce_parser::goto_table = {
   { {.state = 15U, .symb = F}, 16U}, //
 };
 
-void Shift_reduce_parser::parse(const tokens_vector& tokens) {
+void Shift_reduce_parser::parse(const tokens_vector& tokens, Ast& ast) {
   
   std::vector<unsigned int> state_stack;
   state_stack.push_back(0);
+
+  std::vector<std::unique_ptr<Ast::Node>> node_stack;
 
   size_t token_idx = 0;
   VERBOSE_PROLOGUE();
@@ -154,10 +158,14 @@ void Shift_reduce_parser::parse(const tokens_vector& tokens) {
     if (action.type == SHIFT) {
       
       shift(state_stack, action);
+      handle_ast_on_shift(node_stack, action, *tokens[token_idx], cur_symb);
+
       ++token_idx;
 
     } else if (action.type == REDUCE) {
+      
       reduce(state_stack, action);
+      // handle_ast_on_reduce(node_stack, action);
 
     } else { 
 
@@ -167,6 +175,52 @@ void Shift_reduce_parser::parse(const tokens_vector& tokens) {
 
     VERBOSE_ITER();
   }
+
+  assert(node_stack.size() == 1);
+  ast.set_root(std::move(node_stack.back()));
+}
+
+void Shift_reduce_parser::handle_ast_on_shift(
+  Shift_reduce_parser::node_stack_t& node_stack, 
+  Shift_reduce_parser::Action action, const Lexer::Token& token,
+  unsigned int cur_symb) {
+  
+  switch(action.num) {
+
+    /* ID */
+    case 5U: {
+      std::string value = token.value_str();
+      node_stack.push_back(std::make_unique<Id_node>(value)); 
+      std::clog << "ID node \n";
+      break;
+    }
+    
+    /* MUL, ADD, SUB, DIV */
+    case  7U: [[fallthough]];
+    case  8U: [[fallthough]];
+    case 13U: [[fallthough]];
+    case 15U: {
+      node_stack.push_back(std::make_unique<Op_node>(cur_symb)); 
+      std::clog << "OP node \n";
+      break;
+    }
+    
+    /* NUM */
+    case 12U: { 
+      int value = std::stoi(token.value_str());
+      node_stack.push_back(std::make_unique<Num_node>(value)); 
+      std::clog << "NUM node \n";
+      break;
+    }
+
+    default: return;
+  }
+}
+
+void Shift_reduce_parser::handle_ast_on_reduce(
+  Shift_reduce_parser::node_stack_t& node_stack, 
+  Shift_reduce_parser::Action action) {
+  
 }
 
 void Shift_reduce_parser::shift(std::vector<unsigned int>& state_stack, 

@@ -58,10 +58,21 @@ public:
 
   ~Shift_reduce_parser() {}
 
-  void parse(const tokens_vector& tokens) override;
+  void parse(const tokens_vector& tokens, AST::Ast& ast) override;
+
+private:
 
   void shift (std::vector<unsigned int>& state_stack, Action action);
   void reduce(std::vector<unsigned int>& state_stack, Action action);
+
+  using node_stack_t = std::vector<std::unique_ptr<AST::Ast::Node>>;
+
+  void handle_ast_on_shift(node_stack_t& node_stack, Action action, 
+                           const Lexer::Token& token, unsigned int cur_symb);
+
+  void handle_ast_on_reduce(node_stack_t& node_stack, Action action);
+
+  unsigned int token_to_terminal(const Lexer::Token& token);
 
 #ifdef VERBOSE
 
@@ -80,9 +91,6 @@ public:
   static void verbose_print_str_aligned(const std::string& str);
 #endif
 
-private:
-
-  unsigned int token_to_terminal(const Lexer::Token& token);
 };
 
 }; // namespace Syntax

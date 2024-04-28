@@ -3,6 +3,7 @@
 
 #include "liblexer/lexer.hpp"
 #include "grammar.hpp"
+#include "ast.hpp"
 
 namespace Syntax {
 
@@ -20,7 +21,7 @@ protected:
 public:
 
   using tokens_vector = std::vector<std::unique_ptr<Lexer::Token>>;
-  virtual void parse(const tokens_vector& tokens) = 0;
+  virtual void parse(const tokens_vector& tokens, AST::Ast& ast) = 0;
 
 };
 
