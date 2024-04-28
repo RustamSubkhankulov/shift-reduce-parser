@@ -146,23 +146,23 @@ const Shift_reduce_parser::Action_table Shift_reduce_parser::action_table = {
 
 const Shift_reduce_parser::Goto_table Shift_reduce_parser::goto_table = {
 
-  { {.state = 0U,  .symb = E}, 1U },
-  { {.state = 0U,  .symb = T}, 2U },
-  { {.state = 0U,  .symb = F}, 3U },
+  { {.state = 0U,  .symb = E}, .num = 1U },
+  { {.state = 0U,  .symb = T}, .num = 2U },
+  { {.state = 0U,  .symb = F}, .num = 3U },
 
-  { {.state = 4U,  .symb = E}, 8U },
-  { {.state = 4U,  .symb = T}, 2U },
-  { {.state = 4U,  .symb = F}, 3U },
+  { {.state = 4U,  .symb = E}, .num = 8U },
+  { {.state = 4U,  .symb = T}, .num = 2U },
+  { {.state = 4U,  .symb = F}, .num = 3U },
 
-  { {.state = 6U,  .symb = T}, 9U },
-  { {.state = 6U,  .symb = F}, 3U },
+  { {.state = 6U,  .symb = T}, .num = 9U },
+  { {.state = 6U,  .symb = F}, .num = 3U },
 
-  { {.state = 7U,  .symb = F}, 10U},
+  { {.state = 7U,  .symb = F}, .num = 10U},
 
-  { {.state = 13U, .symb = T}, 14U}, //
-  { {.state = 13U, .symb = F}, 3U }, //
+  { {.state = 13U, .symb = T}, .num = 14U}, //
+  { {.state = 13U, .symb = F}, .num = 3U }, //
 
-  { {.state = 15U, .symb = F}, 16U}, //
+  { {.state = 15U, .symb = F}, .num = 16U}, //
 };
 
 void Shift_reduce_parser::parse(const tokens_vector& tokens) {
@@ -225,7 +225,7 @@ void Shift_reduce_parser::reduce(std::vector<unsigned int>& state_stack,
     state_stack.pop_back();
   }
 
-  auto new_state = goto_table.find({state_stack.back(), production.nonterminal});
+  auto new_state = goto_table.find({state_stack.back(), production.header});
 
   if (new_state == goto_table.end()) {
     throw std::runtime_error{"Syntax error"};

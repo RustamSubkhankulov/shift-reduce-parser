@@ -26,7 +26,7 @@ enum Terminal {
 };
 
 struct Production {
-  unsigned int nonterminal;
+  unsigned int header;
   unsigned int len;
   std::string str;
 };
@@ -34,31 +34,31 @@ struct Production {
 const std::vector<Production> Productions = {
 
   /* (1) E -> E + T */
-  {.nonterminal = Nonterminal::E, .len = 3, .str = "E->E+T"},
+  {.header = Nonterminal::E, .len = 3, .str = "E->E+T"},
 
   /* (2) E -> E - T */
-  {.nonterminal = Nonterminal::E, .len = 3, .str = "E->E-T"},
+  {.header = Nonterminal::E, .len = 3, .str = "E->E-T"},
 
   /* (3) E -> T */
-  {.nonterminal = Nonterminal::E, .len = 1, .str = "E->T"},
+  {.header = Nonterminal::E, .len = 1, .str = "E->T"},
 
   /* (4) T -> T * F */
-  {.nonterminal = Nonterminal::T, .len = 3, .str = "T->T*F"},
+  {.header = Nonterminal::T, .len = 3, .str = "T->T*F"},
 
   /* (5) T -> T / F */
-  {.nonterminal = Nonterminal::T, .len = 3, .str = "T->T/F"},
+  {.header = Nonterminal::T, .len = 3, .str = "T->T/F"},
 
   /* (6) T -> F */
-  {.nonterminal = Nonterminal::T, .len = 1, .str = "T->F"},
+  {.header = Nonterminal::T, .len = 1, .str = "T->F"},
 
   /* (7) F -> (E) */
-  {.nonterminal = Nonterminal::F, .len = 3, .str = "F->(E)"},
+  {.header = Nonterminal::F, .len = 3, .str = "F->(E)"},
 
   /* (8) F -> id */
-  {.nonterminal = Nonterminal::F, .len = 1, .str = "F->id"},
+  {.header = Nonterminal::F, .len = 1, .str = "F->id"},
 
   /* (9) F -> num */
-  {.nonterminal = Nonterminal::F, .len = 1, .str = "F->num"},
+  {.header = Nonterminal::F, .len = 1, .str = "F->num"},
 
 };
 
