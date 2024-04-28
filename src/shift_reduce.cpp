@@ -204,7 +204,7 @@ unsigned int Shift_reduce_parser::token_to_terminal(const Lexer::Token& token) {
   if (token_class == Lexer::VAR_ID) {
     return Arithm::ID;
 
-  } else if (token_class == Lexer::NUM) {
+  } else if (token_class == Lexer::NUMINT) {
     return Arithm::NUM;
 
   } else if (token_class == Lexer::OPER) {

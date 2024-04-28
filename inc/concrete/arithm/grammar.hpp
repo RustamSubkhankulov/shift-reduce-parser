@@ -23,13 +23,13 @@ enum Nonterminal {
 enum Terminal {
   ID    = 0,
   NUM   = 1,
-  ADD   = 2,
-  SUB   = 3,
-  MUL   = 4,
-  DIV   = 5,
-  OP_BR = 6,
-  CL_BR = 7,
-  END   = 8,
+  ADD   = 3,
+  SUB   = 4,
+  MUL   = 5,
+  DIV   = 6,
+  OP_BR = 7,
+  CL_BR = 8,
+  END   = 9,
   NUM_TERMINALS
 };
 
