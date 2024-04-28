@@ -33,7 +33,7 @@ enum Terminal {
   NUM_TERMINALS
 };
 
-const std::vector<Grammar::Production> Productions = {
+const std::vector<Grammar::Production> Grammar_productions = {
 
   /* (1) E -> E + T */
   {.header = Nonterminal::E, .len = 3, .str = "E->E+T"},

@@ -32,6 +32,11 @@ if (VERBOSE)
   target_compile_definitions(${PROJECT_NAME} PRIVATE -DVERBOSE)
 endif()
 
+option(DUMP "Dump AST in DOT format" OFF)
+if (DUMP)
+  target_compile_definitions(${PROJECT_NAME} PRIVATE -DDUMP)
+endif()
+
 target_link_directories(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/lib)
 target_link_libraries(${PROJECT_NAME} PUBLIC liblexer)
 

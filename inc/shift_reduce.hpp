@@ -53,8 +53,9 @@ private:
 
 public:
 
-  Shift_reduce_parser(const std::vector<Grammar::Production>& productions):
-    Parser(productions) {}
+  Shift_reduce_parser(const std::vector<Grammar::Production>& grammar_productions,
+                      const std::vector<AST::Production>& ast_productions):
+    Parser(grammar_productions, ast_productions) {}
 
   ~Shift_reduce_parser() {}
 

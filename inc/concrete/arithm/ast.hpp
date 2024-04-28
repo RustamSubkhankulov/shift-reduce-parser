@@ -4,6 +4,8 @@
 #include <string>
 
 #include <ast.hpp>
+#include <utility>
+#include <concrete/arithm/grammar.hpp>
 
 /*
  * Arithmetical grammar:
@@ -14,6 +16,44 @@
  */
 
 namespace Arithm {
+
+enum Aggr_node_type {
+  EXPR = 0,
+  TERM = 1,
+  FACT = 2,
+  NUM_AGGR_NODE_TYPES
+};
+
+const std::vector<AST::Production> Ast_productions = {
+
+  /* (1) E -> E + T */
+  {.header = Aggr_node_type::EXPR, .len = 3},
+
+  /* (2) E -> E - T */
+  {.header = Aggr_node_type::EXPR, .len = 3},
+
+  /* (3) E -> T */
+  {.header = Aggr_node_type::EXPR, .len = 1},
+
+  /* (4) T -> T * F */
+  {.header = Aggr_node_type::TERM, .len = 3},
+
+  /* (5) T -> T / F */
+  {.header = Aggr_node_type::TERM, .len = 3},
+
+  /* (6) T -> F */
+  {.header = Aggr_node_type::TERM, .len = 1},
+
+  /* (7) F -> (E) */
+  {.header = Aggr_node_type::FACT, .len = 1},
+
+  /* (8) F -> id */
+  {.header = Aggr_node_type::FACT, .len = 1},
+
+  /* (9) F -> num */
+  {.header = Aggr_node_type::FACT, .len = 1},
+
+};
 
 using Basic_ast_node = AST::Ast::Node;
 
@@ -75,7 +115,8 @@ class Expr_node : public Basic_ast_node {
 
 public:
 
-  Expr_node() {}
+  Expr_node(std::vector<std::unique_ptr<Node>>&& children):
+    Basic_ast_node(std::move(children)) {}
 
   void print(std::ostream& ostream) const override {
     ostream << "E";
@@ -87,7 +128,8 @@ class Term_node : public Basic_ast_node {
 
 public:
 
-  Term_node() {}
+  Term_node(std::vector<std::unique_ptr<Node>>&& children):
+    Basic_ast_node(std::move(children)) {}
 
   void print(std::ostream& ostream) const override {
     ostream << "T";
@@ -99,7 +141,8 @@ class Factor_node : public Basic_ast_node {
 
 public:
 
-  Factor_node() {}
+  Factor_node(std::vector<std::unique_ptr<Node>>&& children):
+    Basic_ast_node(std::move(children)) {}
 
   void print(std::ostream& ostream) const override {
     ostream << "F";

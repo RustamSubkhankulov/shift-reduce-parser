@@ -165,7 +165,7 @@ void Shift_reduce_parser::parse(const tokens_vector& tokens, Ast& ast) {
     } else if (action.type == REDUCE) {
       
       reduce(state_stack, action);
-      // handle_ast_on_reduce(node_stack, action);
+      handle_ast_on_reduce(node_stack, action);
 
     } else { 
 
@@ -175,6 +175,8 @@ void Shift_reduce_parser::parse(const tokens_vector& tokens, Ast& ast) {
 
     VERBOSE_ITER();
   }
+
+  VERBOSE_EPILOGUE();
 
   assert(node_stack.size() == 1);
   ast.set_root(std::move(node_stack.back()));
@@ -191,7 +193,7 @@ void Shift_reduce_parser::handle_ast_on_shift(
     case 5U: {
       std::string value = token.value_str();
       node_stack.push_back(std::make_unique<Id_node>(value)); 
-      std::clog << "ID node \n";
+      //std::clog << "\nID node \n";
       break;
     }
     
@@ -201,7 +203,7 @@ void Shift_reduce_parser::handle_ast_on_shift(
     case 13U: [[fallthough]];
     case 15U: {
       node_stack.push_back(std::make_unique<Op_node>(cur_symb)); 
-      std::clog << "OP node \n";
+      //std::clog << "\nOP node \n";
       break;
     }
     
@@ -209,7 +211,7 @@ void Shift_reduce_parser::handle_ast_on_shift(
     case 12U: { 
       int value = std::stoi(token.value_str());
       node_stack.push_back(std::make_unique<Num_node>(value)); 
-      std::clog << "NUM node \n";
+      //std::clog << "\nNUM node \n";
       break;
     }
 
@@ -220,7 +222,31 @@ void Shift_reduce_parser::handle_ast_on_shift(
 void Shift_reduce_parser::handle_ast_on_reduce(
   Shift_reduce_parser::node_stack_t& node_stack, 
   Shift_reduce_parser::Action action) {
+
+  unsigned int prod_idx = action.num - 1;
+  auto production = Parser::ast_productions_[prod_idx];
   
+  std::vector<std::unique_ptr<Ast::Node>> children;
+
+  for (unsigned int ct = 0; ct < production.len; ++ct) {
+
+    children.push_back(std::move(node_stack.back()));
+    node_stack.pop_back();
+
+    //std::clog << "\nPoped \n";
+  }
+
+  switch(production.header) {
+
+    case Arithm::EXPR: node_stack.push_back(std::make_unique<Expr_node>(std::move(children)));
+                       break;
+    case Arithm::TERM: node_stack.push_back(std::make_unique<Term_node>(std::move(children)));
+                       break;
+    case Arithm::FACT: node_stack.push_back(std::make_unique<Factor_node>(std::move(children)));
+                       break;
+  }
+
+  //std::clog << "\nPushed \n";
 }
 
 void Shift_reduce_parser::shift(std::vector<unsigned int>& state_stack, 
@@ -234,7 +260,7 @@ void Shift_reduce_parser::reduce(std::vector<unsigned int>& state_stack,
                                  Shift_reduce_parser::Action action) {
 
   unsigned int prod_idx = action.num - 1;
-  auto production = Parser::productions_[prod_idx];
+  auto production = Parser::grammar_productions_[prod_idx];
 
   VERBOSE_MSG_REDUCE(action.num, production.str);
 

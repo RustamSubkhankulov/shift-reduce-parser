@@ -11,6 +11,8 @@ struct Production {
   std::string str;
 };
 
+extern const std::vector<Production> Grammar_productions;
+
 }; // namespace Grammar
 
 #endif // GRAMMAR_HPP

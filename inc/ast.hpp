@@ -7,6 +7,13 @@
 
 namespace AST {
 
+struct Production {
+  unsigned int header;
+  unsigned int len;
+};
+
+extern const std::vector<Production> Ast_productions;
+
 class Ast {
 
 public:
@@ -28,27 +35,11 @@ public:
       children_.push_back(std::move(child));
     }
 
-    void dump_node(std::ostream& ostream, unsigned depth = 0) const {
-      
-      auto children_ct = children_.size();
-      auto half = std::ceil(children_ct / 2);
+#ifdef DUMP
+    void dump_node(std::ostream& os) const;
+#endif
 
-      for (decltype(children_ct) idx = 0; idx < half; ++idx) {
-        children_[idx]->dump_node(ostream, depth + 1);
-      }
-
-      for (unsigned idx = 0; idx < depth; ++idx) {
-        ostream << '\t';
-      }
-
-      print(ostream);
-
-      for (decltype(children_ct) idx = half; idx < children_ct; ++idx) {
-        children_[idx]->dump_node(ostream, depth + 1);
-      }
-    }
-
-    virtual void print(std::ostream& ostream) const = 0;
+  virtual void print(std::ostream& os) const = 0;
   };
 
 private:
@@ -66,9 +57,9 @@ public:
 
   virtual ~Ast() {}
 
-  void dump_tree(std::ostream& ostream) const {
-    root_->dump_node(ostream);
-  }
+#ifdef DUMP
+  void dump_tree(std::ostream& os) const;
+#endif
 };
 
 }; // namespace AST

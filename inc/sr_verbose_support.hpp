@@ -16,7 +16,8 @@
     ++iter_idx;
 
   #define VERBOSE_EPILOGUE()            \
-    verbose_write_separator()
+    std::clog << std::endl;             \
+    verbose_write_separator();
 
   #define VERBOSE_MSG_SHIFT(num)        \
     verbose_print_str_aligned("SHIFT "  + std::to_string(num));
