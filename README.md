@@ -162,7 +162,8 @@ SLR-анализатор ("Simple LR") состоит из входного бу
 - <code>dot dump.txt -Tpng -o dump.png</code>
 
 Пример AST для выражения $(v1 - 100) / v2$
-<img alt='AST dump' src='pictures/dump.png' width=600>
+
+<img alt='AST' src='pictures/dump.png' width='400'>
 
 Пример вывода для выражения $(v1 - 100) / v2$
 ```
