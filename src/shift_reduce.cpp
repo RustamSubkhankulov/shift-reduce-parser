@@ -1,50 +1,13 @@
-#include "shift_reduce.hpp"
 #include <stdexcept>
 #include <cstring>
 #include <string>
 
-#ifdef VERBOSE
-
-  #define VERBOSE_PROLOGUE()            \
-    unsigned int iter_idx = 0U;         \
-    verbose_write_header();       
-
-  #define VERBOSE_ANNOTATE(tokens, token_idx, state_stack, iter_idx)  \
-    verbose_annotate(tokens, token_idx, state_stack, iter_idx);
-
-  #define VERBOSE_ITER()                \
-    std::clog << std::endl;             \
-    verbose_write_separator();          \
-    ++iter_idx;
-
-  #define VERBOSE_EPILOGUE()            \
-    verbose_write_separator()
-
-  #define VERBOSE_MSG_SHIFT(num)        \
-    verbose_print_str_aligned("SHIFT "  + std::to_string(num));
-
-  #define VERBOSE_MSG_REDUCE(num, str)  \
-    verbose_print_str_aligned("REDUCE " + std::to_string(num) + " " + str);
-
-  #define VERBOSE_MSG_ACCEPT()          \
-    verbose_print_str_aligned("ACCEPT");
-
-#else 
-
-  #define VERBOSE_PROLOGUE()
-  #define VERBOSE_ANNOTATE(tokens, token_idx, state_stack, iter_idx)
-  #define VERBOSE_ITER()
-  #define VERBOSE_EPILOGUE()
-
-  #define VERBOSE_MSG_SHIFT(num)
-  #define VERBOSE_MSG_REDUCE(num, str)
-  #define VERBOSE_MSG_ACCEPT()
-
-#endif
+#include "shift_reduce.hpp"
+#include "sr_verbose_support.hpp"
 
 namespace Syntax {
 
-using namespace Grammar;
+using namespace Arithm;
 
 const Shift_reduce_parser::Action_table Shift_reduce_parser::action_table = {
 
@@ -146,23 +109,23 @@ const Shift_reduce_parser::Action_table Shift_reduce_parser::action_table = {
 
 const Shift_reduce_parser::Goto_table Shift_reduce_parser::goto_table = {
 
-  { {.state = 0U,  .symb = E}, .num = 1U },
-  { {.state = 0U,  .symb = T}, .num = 2U },
-  { {.state = 0U,  .symb = F}, .num = 3U },
+  { {.state = 0U,  .symb = E}, 1U },
+  { {.state = 0U,  .symb = T}, 2U },
+  { {.state = 0U,  .symb = F}, 3U },
 
-  { {.state = 4U,  .symb = E}, .num = 8U },
-  { {.state = 4U,  .symb = T}, .num = 2U },
-  { {.state = 4U,  .symb = F}, .num = 3U },
+  { {.state = 4U,  .symb = E}, 8U },
+  { {.state = 4U,  .symb = T}, 2U },
+  { {.state = 4U,  .symb = F}, 3U },
 
-  { {.state = 6U,  .symb = T}, .num = 9U },
-  { {.state = 6U,  .symb = F}, .num = 3U },
+  { {.state = 6U,  .symb = T}, 9U },
+  { {.state = 6U,  .symb = F}, 3U },
 
-  { {.state = 7U,  .symb = F}, .num = 10U},
+  { {.state = 7U,  .symb = F}, 10U},
 
-  { {.state = 13U, .symb = T}, .num = 14U}, //
-  { {.state = 13U, .symb = F}, .num = 3U }, //
+  { {.state = 13U, .symb = T}, 14U}, //
+  { {.state = 13U, .symb = F}, 3U }, //
 
-  { {.state = 15U, .symb = F}, .num = 16U}, //
+  { {.state = 15U, .symb = F}, 16U}, //
 };
 
 void Shift_reduce_parser::parse(const tokens_vector& tokens) {
@@ -239,20 +202,20 @@ unsigned int Shift_reduce_parser::token_to_terminal(const Lexer::Token& token) {
   auto token_class = token.token_class();
 
   if (token_class == Lexer::VAR_ID) {
-    return Grammar::ID;
+    return Arithm::ID;
 
   } else if (token_class == Lexer::NUM) {
-    return Grammar::NUM;
+    return Arithm::NUM;
 
   } else if (token_class == Lexer::OPER) {
 
     auto token_value = dynamic_cast<const Lexer::Token_oper&>(token).value();
 
     switch (token_value) {
-      case Lexer::Token_oper::ADD: return Grammar::ADD;
-      case Lexer::Token_oper::SUB: return Grammar::SUB;
-      case Lexer::Token_oper::MUL: return Grammar::MUL;
-      case Lexer::Token_oper::DIV: return Grammar::DIV;
+      case Lexer::Token_oper::ADD: return Arithm::ADD;
+      case Lexer::Token_oper::SUB: return Arithm::SUB;
+      case Lexer::Token_oper::MUL: return Arithm::MUL;
+      case Lexer::Token_oper::DIV: return Arithm::DIV;
 
       default: throw std::invalid_argument{"Invalid token"};
     }
@@ -262,9 +225,9 @@ unsigned int Shift_reduce_parser::token_to_terminal(const Lexer::Token& token) {
     auto token_value = dynamic_cast<const Lexer::Token_punct&>(token).value();
 
     switch (token_value) {
-      case Lexer::Token_punct::OPENING_BR: return Grammar::OP_BR;
-      case Lexer::Token_punct::CLOSING_BR: return Grammar::CL_BR;
-      case Lexer::Token_punct::END:        return Grammar::END;
+      case Lexer::Token_punct::OPENING_BR: return Arithm::OP_BR;
+      case Lexer::Token_punct::CLOSING_BR: return Arithm::CL_BR;
+      case Lexer::Token_punct::END:        return Arithm::END;
 
       default: throw std::invalid_argument{"Invalid token"};
     }
@@ -272,59 +235,5 @@ unsigned int Shift_reduce_parser::token_to_terminal(const Lexer::Token& token) {
 
   throw std::invalid_argument{"Invalid token"};
 }
-
-#ifdef VERBOSE
-
-void Shift_reduce_parser::verbose_write_header() {
-
-  verbose_write_separator();
-
-  std::clog << "|ITER|" 
-            << std::setw(Table_entry_width) << std::left << "STACK" << "|"
-            << std::setw(Table_entry_width) << std::left << "INPUT" << "|"
-            << std::setw(Table_entry_width) << std::left << "ACTION"
-            << "|\n";
-
-  verbose_write_separator();
-}
-
-void Shift_reduce_parser::verbose_write_separator() {
-
-  std::clog << " ";
-  for (unsigned idx = 0; idx < Table_entry_width * 3 + 7; ++idx) {
-    std::clog << "-";
-  }
-  std::clog << std::endl;
-}
-
-void Shift_reduce_parser::verbose_print_str_aligned(const std::string& str) {
-
-  std::string to_print = str + std::string(Table_entry_width - str.size(), ' ');
-  std::clog << to_print << "|";
-}
-
-void Shift_reduce_parser::verbose_annotate(const tokens_vector& tokens, size_t token_idx, 
-                                           const std::vector<unsigned int>& state_stack, 
-                                           unsigned iter_idx) {
-
-  std::clog << "|" << std::setw(4) << iter_idx << "|";
-
-  std::string str;
-
-  for (auto it = state_stack.begin(); it != state_stack.end(); ++it) {
-    str += std::to_string(*it) + " ";
-  }
-  
-  verbose_print_str_aligned(str);
-  str.clear();
-
-  for (size_t idx = token_idx; idx < tokens.size(); ++idx) {
-    str += tokens[idx]->value_str() + " ";
-  }
-
-  verbose_print_str_aligned(str);
-}
-
-#endif // VERBOSE
 
 }; // namespace Syntax

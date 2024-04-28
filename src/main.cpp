@@ -6,7 +6,7 @@ int main() {
 
   auto& tokens = Lexer::get_tokens();
 
-  Syntax::Shift_reduce_parser parser{Grammar::Productions};
+  Syntax::Shift_reduce_parser parser{Arithm::Productions};
   parser.parse(tokens);
 
   return 0;

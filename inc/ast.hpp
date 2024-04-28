@@ -15,8 +15,6 @@ class Ast_node {
 
 public:
 
-  
-
 };
 
 #endif // AST_HPP

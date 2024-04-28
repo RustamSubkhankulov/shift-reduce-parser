@@ -4,7 +4,9 @@
 #include <stack>
 #include <unordered_map>
 
-#include "grammar.hpp"
+#include "concrete/arithm/grammar.hpp"
+#include "concrete/arithm/ast.hpp"
+
 #include "parser.hpp"
 
 namespace Syntax {
