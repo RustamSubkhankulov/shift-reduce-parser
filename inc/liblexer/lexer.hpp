@@ -16,7 +16,8 @@ enum Token_class {
   KWORD,    /* Keyword. */
   TYPE_ID,  /* Type identifier. */
   VAR_ID,   /* Variable identifier. */
-  NUM,      /* Constant number. */
+  NUMINT,   /* Constant integer number. */
+  NUMFLT,   /* Constant float number. */
   STR,      /* String literal. */
   OPER,     /* Operator. */
   PUNCT     /* Punctuator. */
@@ -144,21 +145,20 @@ public:
 
 //--------------------
 
-template<typename T>
-class Token_num : public Token {
+class Token_numint : public Token {
 
 private:
 
-  T value_;
+  int value_;
 
 public:
 
-  Token_num(T value):
-    Token(Token_class::NUM),
+  Token_numint(int value):
+    Token(Token_class::NUMINT),
     value_(value) {}
 
   std::string class_str() const override {
-    return std::string("NUM") + typeid(T).name();
+    return std::string("NUMINT");
   }
 
   std::string value_str() const override {
@@ -166,6 +166,28 @@ public:
   }
 };
 
+//--------------------
+
+class Token_numflt : public Token {
+
+private:
+
+  float value_;
+
+public:
+
+  Token_numflt(float value):
+    Token(Token_class::NUMFLT),
+    value_(value) {}
+
+  std::string class_str() const override {
+    return std::string("NUMFLT");
+  }
+
+  std::string value_str() const override {
+    return std::to_string(value_);
+  }
+};
 
 //--------------------
 
