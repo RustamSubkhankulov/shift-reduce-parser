@@ -2,6 +2,7 @@
 #define GRAMMAR_HPP
 
 #include <vector>
+#include <string>
 
 namespace Grammar {
 

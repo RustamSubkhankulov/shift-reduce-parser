@@ -1,7 +1,7 @@
 #ifndef PARSER_HPP
 #define PARSER_HPP
 
-#include "liblexer/lexer.hpp"
+#include "lexer.hpp"
 #include "grammar.hpp"
 #include "ast.hpp"
 
